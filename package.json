@@ -1,0 +1,20 @@
+{
+  "name": "stegajs",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lsb.js",
+  "bin": {
+    "stegajs": "app.js"
+  },
+  "dependencies": {
+    "commander": "^9.4.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "piscina": "^3.2.0",
+    "sharp": "^0.29.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

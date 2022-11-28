@@ -28,6 +28,10 @@ Video steganography, which is the one used in this project tries to hide data in
 
 Using a static image video (such as a music compilation from youtube) as a base makes the process a lot easier so for this first version we chose to use this method.  
 
+RESTRICTIONS:
+* This currently only works on .png images.
+* We currently only change a frame once every 2 seconds (fps = 1/2). This is done for easier syncing of embedding / retrieving. This tremendously lowers the size of data that can be conceiled per second of video.
+
 ## Least Significant Bit Steganography
 Each image can be represented by an array of pixels and each pixel can be represented in the RGB colorspace as three values (0-255), or three 8bit binary numbers.  
 What least siginificant bit steganography does is hide a couple of bits from the original data in the last couple of bits from the channels of each of the image's pixels. This changes the value of each channel so little that no visual change can be spotted. The more bits we use from each channel the more noticable the changes will be.
@@ -50,13 +54,12 @@ In each subsequent image the first bits keep information about how many data pac
 #### Embed Process
 ##### input: ( video file | image file & audio file) & encrypt key file & message file
 ##### output: data embedded video file
-1. Take a sample image from the video input
-1. Calculate how much data we can hide in each instance of the image
+1. Calculate how much data we can hide in each instance of the given input image
 1. Split the original message file in chunks of said data size
 1. Create a "header" image containing the original file name and total image count ( to be used for retriving the data later)
 1. Create one embedded image using the sample image and embedding the chunk data inside after first encrypting the data with the key
 1. Join the images into a video
-1. Apply the audio from the input video file
+1. Apply the input audio to the video file
 
 #### Retrieve Process
 ##### input: data embedded video file & encrypt key file
@@ -71,7 +74,8 @@ In each subsequent image the first bits keep information about how many data pac
 
 # Usage
 
-Use it as a cli tool, below are the helptext provided:
+Meant to be used as a cli tool.  
+This app requires ffmpeg to be present in your path.
 
 [(Back to top)](#table-of-contents)
 
@@ -99,10 +103,13 @@ Usage: stegajs embed [options]
 Embed a given file into a carrier image / video.
 
 Options:
-  -d, --debug                       print additional debug information
   -m, --messageFile <path-to-file>  the file to embed
+  -i, --imageFile <path-to-file>    the image to be used for embedding
+  -a, --audioFile <path-to-file>    the audio file to be used for the final video
   -k, --keyFile <path-to-file>      your private keyfile used to encrypt the message
-  -o, --outPath <path-to-folder>    the path to create the output image / video
+  -o, --outPath <path-to-folder>    the path to create the output image / video (default: "./out")
+  -d, --debug                       print additional debug information (default: false)
+  -t, --keepTemp                    keep temporary files after the process (default: false)
   -h, --help                        display help for command
 ```
 
@@ -111,11 +118,12 @@ Options:
 Usage: stegajs retrieve [options]
 
 Options:
-  -d, --debug                       print additional debug information
-  -c, --carrierFile <path-to-file>  the file in which the message is embedded
-  -k, --keyFile <path-to-file>      your private keyfile used to decrypt the message
-  -o, --outPath <path-to-folder>    the path to save the retrieved file
-  -h, --help                        display help for command
+  -v, --videoFile <path-to-file>  the video file in which the message is embedded
+  -k, --keyFile <path-to-file>    your private keyfile used to decrypt the message
+  -o, --outPath <path-to-folder>  the path to save the retrieved file (default: "./out")
+  -d, --debug                     print additional debug information (default: false)
+  -t, --keepTemp                  keep temporary files after the process (default: false)
+  -h, --help                      display help for command
 ```
 
 ## Create Key Usage
@@ -123,8 +131,9 @@ Options:
 Usage: stegajs createKey [options]
 
 Options:
-  -l, --length <bytes>
-  -h, --help            display help for command
+  -o, --outPath <path-to-folder>  the path to create the key file (default: "./keyfile")
+  -l, --length <bytes>            the length of the key in bytes (default: 256)
+  -h, --help                      display help for command
 ```
 
 # Installation
@@ -137,6 +146,15 @@ Until a better packaged version comes the way to install and use this package is
 1. Download the repository from github
 1. Run `npm install` to get the necessary packages
 1. Run `node app.js` with the desired options
+
+# Next Steps / TODOs
+
+* Transcribe code to Typescript
+* Write tests
+* Fix syncing errors to allow for bigger framerates
+* Fix audio / video sync to allow for real videos instead of single screen videos
+* Implement download / install ffmpeg command
+* Create build pipeline to produce executable binaries
 
 # Contributing
 
