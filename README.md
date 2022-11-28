@@ -73,11 +73,10 @@ In each subsequent image the first bits keep information about how many data pac
 ![1](https://user-images.githubusercontent.com/12852170/201436913-7cdd6c34-09cd-49fa-aaed-d4353f59691a.png)
 
 # Usage
+[(Back to top)](#table-of-contents)
 
 Meant to be used as a cli tool.  
 This app requires ffmpeg to be present in your path.
-
-[(Back to top)](#table-of-contents)
 
 ## General Usage
 ```
@@ -148,6 +147,8 @@ Until a better packaged version comes the way to install and use this package is
 1. Run `node app.js` with the desired options
 
 # Next Steps / TODOs
+
+[(Back to top)](#table-of-contents)
 
 * Transcribe code to Typescript
 * Write tests
